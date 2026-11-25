@@ -1,0 +1,33 @@
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* The highlight itself. Hidden unless the device has a mouse. */
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    240px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+    var(--spot-color),
+    transparent 70%
+  );
+  transition: opacity 180ms ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+}
+
+.spotlight-card > * {
+  position: relative;
+  z-index: 1;
+}

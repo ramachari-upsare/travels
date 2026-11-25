@@ -1,0 +1,26 @@
+/* Hero texture layer.
+   Base: static teal with a very faint pattern (safe on every device).
+   Above it: Silk, blended softly so white copy stays at 7:1 or better. */
+.hero__fx {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* above the photo overlay, below the hero copy */
+  pointer-events: none;
+  opacity: 1;
+  background-color: rgba(10, 71, 71, 0.55);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.hero__fx .silk {
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+}
+
+/* Without WebGL, or on phones and reduced motion, the pattern above is all
+   there is — deliberately quiet. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__fx .silk {
+    display: none;
+  }
+}
