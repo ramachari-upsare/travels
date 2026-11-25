@@ -9,9 +9,10 @@ python3 -m http.server 8000
 ```
 
 ## Page order
-Header → hero with quick booking form → services → fleet + rate table →
-how it works → full booking form → why book with us → hidden reviews block →
-FAQ → closing CTA → footer → mobile Call / WhatsApp / Book Now bar.
+Header → hero (headline, Book Now + WhatsApp, quick booking form) → popular
+routes strip → services → fleet + rate table → how it works → full booking
+form → why book with us → hidden reviews block → FAQ → closing CTA → footer →
+mobile Call / WhatsApp / Book Now bar.
 
 ## Design rules
 - **Font:** Manrope 400 / 600 / 800 (Google Fonts) — nothing else.
@@ -23,6 +24,7 @@ FAQ → closing CTA → footer → mobile Call / WhatsApp / Book Now bar.
 - **Surfaces:** solid colours, 1px `--line` borders, `--shadow` (small and soft), radius 8px for buttons and 12px for cards.
 - **Motion:** hover colour changes and smooth scrolling only. No blur, glass, gradients, parallax or scroll animation.
 - **Layout:** mobile-first, left-aligned text, 4:3 photo crops everywhere. Breakpoints at 600 / 768 / 980 / 1024px.
+- **Spacing:** 8px scale for section padding, grid gaps and card padding (section rhythm `clamp(56px, 7vw, 88px)`); 4px steps only for control padding. Text measures cap at 62–68 characters.
 
 ## Images
 Drop these into `./images/` and they appear automatically:
