@@ -8,23 +8,42 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
+## Page order
+Header → hero with quick booking form → services → fleet + rate table →
+how it works → full booking form → why book with us → hidden reviews block →
+FAQ → closing CTA → footer → mobile Call / WhatsApp / Book Now bar.
+
+## Design rules
+- **Font:** Manrope 400 / 600 / 800 (Google Fonts) — nothing else.
+- **Colours (60-30-10)** — CSS variables at the top of `<style>`:
+  - 60% `--white` `#FFFFFF` and `--grey` `#F4F6F8` for page and section backgrounds; body text `--ink` `#1A2B2B`.
+  - 30% `--teal` `#0E5A5A` for the header, hero overlay, headings and footer.
+  - 10% `--orange` `#E85A0C` **only** for Book Now buttons, prices, and the call / WhatsApp buttons. Text on orange is white 800 at 19px or larger.
+  - Orange on white is 3.56:1, which clears WCAG AA for large text only — never set orange text below 19px bold.
+- **Surfaces:** solid colours, 1px `--line` borders, `--shadow` (small and soft), radius 8px for buttons and 12px for cards.
+- **Motion:** hover colour changes and smooth scrolling only. No blur, glass, gradients, parallax or scroll animation.
+- **Layout:** mobile-first, left-aligned text, 4:3 photo crops everywhere. Breakpoints at 600 / 768 / 980 / 1024px.
+
 ## Images
 Drop these into `./images/` and they appear automatically:
 
 `logo.png`, `etios.jpg`, `ertiga.jpg`, `innova.jpg`, `tt.jpg`, `tt-interior.jpg`
 
-Until a file exists, the site shows a clean branded gradient placeholder instead of a broken image (no layout shift). Vehicle photos are displayed with `object-fit: cover` and lazy loading.
+Until a file exists, the frame shows a grey card with a small car outline and the
+vehicle name instead of a broken image (no layout shift). All photos use
+`object-fit: cover` in a 4:3 box, and everything below the hero is lazy-loaded.
 
 ## Editing
-- **Colours** — 60-30-10, as CSS variables at the top of the `<style>` block:
-  - 60% calm: `--linen` `#F6F0E6` for page/section backgrounds and cards, with `--ink` `#0B1F3F` body text
-  - 30% support: `--navy` `#0B2A5B` for header, hero overlay, footer, headings and glass over dark areas
-  - 10% impact: `--amber` `#FFB300` **only** for Book Now / Book This Car buttons, price highlights, active states and the floating WhatsApp + Call buttons. Text on amber is always navy. Never use amber for body text or large fills.
-  - Glass sits on the hero booking card, the sticky header, the floating buttons, and the vehicle cards — three soft blurred navy/amber fields sit behind the fleet cards so the glass has something to refract.
-- **Phone / WhatsApp** — search for `9845976916` (displayed) and `+919845976916` (links). The number appears in the header, hero, booking form, footer, floating buttons and the JavaScript `wa.me` URL.
-- **Fleet prices** — update the fleet cards, the vehicle `<select>` options (`data-seats` / `data-rate`) and the JSON-LD `makesOffer` block.
-- **Reviews** — `#reviews-section` is empty and `hidden`. Add real reviews inside `#reviews-list`, then remove the `hidden` attribute. No demo reviews are shown.
-- **SEO** — before deploying, replace `./images/tt.jpg` in the Open Graph/Twitter tags with a full `https://` URL.
+- **Phone / WhatsApp** — search for `9845976916` (displayed) and `+919845976916` (links). The number appears in the header, hero, both forms, FAQ, CTA, footer, mobile bar and the JavaScript `WHATSAPP_NUMBER` constant.
+- **Fleet prices** — three places to keep in sync: the fleet cards (`.car-price`), the rate table (`.rates`) and the JSON-LD `makesOffer` block. Seat counts also live in the `<select>` options and in `CAR_SEATS` in the script.
+- **Reviews** — `#reviews-section` is in the markup, empty and `hidden`. Add real reviews inside it, then remove `hidden`. No demo reviews are shown.
+- **SEO** — before deploying, replace `./images/tt.jpg` in the Open Graph / Twitter tags with a full `https://` URL, and add a `"url"` field to the LocalBusiness JSON-LD.
 
 ## Booking flow
-The form validates everything client-side, then opens WhatsApp (`wa.me/919845976916`) with a pre-filled, URL-encoded message. There is no backend and nothing is stored.
+Both forms share one handler. It validates required fields, the 10-digit mobile
+number and the pickup date, writes a neatly formatted message (name, mobile, trip
+type, pickup, drop, formatted date and time, car, passengers, notes), URL-encodes
+it with `encodeURIComponent` and opens `https://wa.me/919845976916?text=…`.
+There is no backend and nothing is stored. Fleet "Book Now" buttons pre-select the
+car in both forms, and a seat warning appears if the group is larger than the
+chosen car. Every failure path still shows "Or call 9845976916".
