@@ -22,11 +22,12 @@ npm run preview    # serve dist/ locally
 
 ## Page
 1. **Header** — wordmark, phone number, Call button.
-2. **Hero** — vehicle photo under a dark teal overlay, one short headline, the four service names on one line, Book Now + WhatsApp, and the single booking form (name, mobile, trip type, pickup, drop optional, date, time optional, car).
-3. **Fleet** — four cards (photo, name, seats, `Rs XX per km`, Book This Car) and the toll note underneath.
-4. **Services** — the four service names, nothing else.
-5. **Contact strip + footer** — phone, WhatsApp, tagline, copyright.
-6. **Mobile bar** — Call / WhatsApp / Book Now, hidden from 768px up.
+2. **Hero** — vehicle photo under a navy overlay with soft steel/blush depth, one headline, the four service names on one line, Book Now + Call. No form in the hero.
+3. **Fleet** — four cards (photo, name, seats, `Rs XX per km`, Book This Car), horizontal snap scrolling on phones and one row on desktop, toll note underneath.
+4. **Services** — the four service names, 2×2 on phones and one row on desktop.
+5. **Booking** — the one form (name, mobile, trip type, pickup, drop optional, date, time optional, car) with a visible call option.
+6. **Contact strip + footer** — phone, Call/WhatsApp, tagline, copyright.
+7. **Mobile bar** — Call / WhatsApp / Book Now, hidden from 768px up.
 
 `#reviews-section` is in the tree, empty and `hidden`, ready for real reviews.
 
@@ -34,10 +35,12 @@ npm run preview    # serve dist/ locally
 `src/lib/booking.js` holds the rules and the message: 10-digit mobile validation, no past dates, `28 Nov 2026` and `2:30 pm` formatting, then `encodeURIComponent` into `https://wa.me/919845976916?text=…`. No backend, nothing stored. Fleet buttons set the car in the form and scroll to it.
 
 ## Design rules
-- One family, Manrope 400/600/800 (`display=swap`).
-- 60/30/10: white + `#F4F6F8`, text `#1A2B2B`, teal `#0E5A5A`, orange `#E85A0C` **only** for Book Now buttons and prices. Orange text on white is always 19px bold or larger, which is the AA threshold for large text.
-- 8px spacing scale, 8px button radius, 12px card radius, 1px `#E2E7E9` borders, small soft shadow, left-aligned copy.
-- Effects are limited to three React Bits components (JS + CSS variants, vendored in `src/components`): **Silk** behind the hero on screens ≥1024px with motion allowed, **SpotlightCard** on fleet cards for mouse users, **BlurText** on the headline once on load. All three degrade to plain CSS; the phone, WhatsApp links and form never depend on them.
+- **Type:** Bricolage Grotesque 600–800 for headings, DM Sans for body, both `display=swap`.
+- **60/30/10:** calm `#D5CED6` (tints `#E6E1E8` / `#F4F1F5`) for page and cards; navy `#1B365A` for header, hero, footer and headings; steel `#7495B9` for borders and details (never text — it is 2:1 on the calm background); orange `#DF6C43` for every primary button; blush `#E2A498` only as a hover tint.
+- Prices use a darker tint of the same orange, `#B4502A`, so they clear AA at any size. Button labels are 19px bold white on orange (AA for large text, 3.3:1).
+- **Squircle corners:** `--r-card: 24px` and `--r-ctl: 20px` with `corner-shape: squircle` (`--corner`). Applied to cards, buttons, inputs and photos; browsers without `corner-shape` fall back to plain rounded corners.
+- 8px spacing scale, 1px borders, small soft shadow, left-aligned copy.
+- One effect, restrained: React Bits **Silk** (JS + CSS variant, vendored in `src/components`) behind the hero, as a lazy chunk on screens ≥1024px with motion allowed. Phones and `prefers-reduced-motion` get a static navy gradient with a faint dot pattern. Call, WhatsApp and the form never depend on it.
 
 ## Images
 `public/images/` holds `logo.png`, `etios`, `ertiga`, `innova`, `tt`, `tt-interior` as
