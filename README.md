@@ -1,51 +1,47 @@
 # Manasvi Tours & Travels
 
-Single-file website for a taxi and tour operator in Bengaluru — **`index.html`** (HTML + CSS + vanilla JS, no build step, no dependencies).
+Mobile-first site for a car-and-driver operator — Vite + React, deployed on Vercel.
 
-## Preview locally
+## Run locally
 ```bash
-python3 -m http.server 8000
-# open http://localhost:8000
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # static build in dist/
+npm run preview    # serve dist/ locally
 ```
 
-## Page order
-Header → hero (headline, Book Now + WhatsApp, quick booking form) → popular
-routes strip → services → fleet + rate table → how it works → full booking
-form → why book with us → hidden reviews block → FAQ → closing CTA → footer →
-mobile Call / WhatsApp / Book Now bar.
+## Vercel settings
+`vercel.json` pins them, so the project builds the same whichever preset the dashboard holds:
+
+| Setting | Value |
+| --- | --- |
+| Framework | Vite |
+| Install command | `npm install` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+## Page
+1. **Header** — wordmark, phone number, Call button.
+2. **Hero** — vehicle photo under a dark teal overlay, one short headline, the four service names on one line, Book Now + WhatsApp, and the single booking form (name, mobile, trip type, pickup, drop optional, date, time optional, car).
+3. **Fleet** — four cards (photo, name, seats, `Rs XX per km`, Book This Car) and the toll note underneath.
+4. **Services** — the four service names, nothing else.
+5. **Contact strip + footer** — phone, WhatsApp, tagline, copyright.
+6. **Mobile bar** — Call / WhatsApp / Book Now, hidden from 768px up.
+
+`#reviews-section` is in the tree, empty and `hidden`, ready for real reviews.
+
+## Booking
+`src/lib/booking.js` holds the rules and the message: 10-digit mobile validation, no past dates, `28 Nov 2026` and `2:30 pm` formatting, then `encodeURIComponent` into `https://wa.me/919845976916?text=…`. No backend, nothing stored. Fleet buttons set the car in the form and scroll to it.
 
 ## Design rules
-- **Font:** Manrope 400 / 600 / 800 (Google Fonts) — nothing else.
-- **Colours (60-30-10)** — CSS variables at the top of `<style>`:
-  - 60% `--white` `#FFFFFF` and `--grey` `#F4F6F8` for page and section backgrounds; body text `--ink` `#1A2B2B`.
-  - 30% `--teal` `#0E5A5A` for the header, hero overlay, headings and footer.
-  - 10% `--orange` `#E85A0C` **only** for Book Now buttons, prices, and the call / WhatsApp buttons. Text on orange is white 800 at 19px or larger.
-  - Orange on white is 3.56:1, which clears WCAG AA for large text only — never set orange text below 19px bold.
-- **Surfaces:** solid colours, 1px `--line` borders, `--shadow` (small and soft), radius 8px for buttons and 12px for cards.
-- **Motion:** hover colour changes and smooth scrolling only. No blur, glass, gradients, parallax or scroll animation.
-- **Layout:** mobile-first, left-aligned text, 4:3 photo crops everywhere. Breakpoints at 600 / 768 / 980 / 1024px.
-- **Spacing:** 8px scale for section padding, grid gaps and card padding (section rhythm `clamp(56px, 7vw, 88px)`); 4px steps only for control padding. Text measures cap at 62–68 characters.
+- One family, Manrope 400/600/800 (`display=swap`).
+- 60/30/10: white + `#F4F6F8`, text `#1A2B2B`, teal `#0E5A5A`, orange `#E85A0C` **only** for Book Now buttons and prices. Orange text on white is always 19px bold or larger, which is the AA threshold for large text.
+- 8px spacing scale, 8px button radius, 12px card radius, 1px `#E2E7E9` borders, small soft shadow, left-aligned copy.
+- Effects are limited to three React Bits components (JS + CSS variants, vendored in `src/components`): **Silk** behind the hero on screens ≥1024px with motion allowed, **SpotlightCard** on fleet cards for mouse users, **BlurText** on the headline once on load. All three degrade to plain CSS; the phone, WhatsApp links and form never depend on them.
 
 ## Images
-Drop these into `./images/` and they appear automatically:
-
-`logo.png`, `etios.jpg`, `ertiga.jpg`, `innova.jpg`, `tt.jpg`, `tt-interior.jpg`
-
-Until a file exists, the frame shows a grey card with a small car outline and the
-vehicle name instead of a broken image (no layout shift). All photos use
-`object-fit: cover` in a 4:3 box, and everything below the hero is lazy-loaded.
-
-## Editing
-- **Phone / WhatsApp** — search for `9845976916` (displayed) and `+919845976916` (links). The number appears in the header, hero, both forms, FAQ, CTA, footer, mobile bar and the JavaScript `WHATSAPP_NUMBER` constant.
-- **Fleet prices** — three places to keep in sync: the fleet cards (`.car-price`), the rate table (`.rates`) and the JSON-LD `makesOffer` block. Seat counts also live in the `<select>` options and in `CAR_SEATS` in the script.
-- **Reviews** — `#reviews-section` is in the markup, empty and `hidden`. Add real reviews inside it, then remove `hidden`. No demo reviews are shown.
-- **SEO** — before deploying, replace `./images/tt.jpg` in the Open Graph / Twitter tags with a full `https://` URL, and add a `"url"` field to the LocalBusiness JSON-LD.
-
-## Booking flow
-Both forms share one handler. It validates required fields, the 10-digit mobile
-number and the pickup date, writes a neatly formatted message (name, mobile, trip
-type, pickup, drop, formatted date and time, car, passengers, notes), URL-encodes
-it with `encodeURIComponent` and opens `https://wa.me/919845976916?text=…`.
-There is no backend and nothing is stored. Fleet "Book Now" buttons pre-select the
-car in both forms, and a seat warning appears if the group is larger than the
-chosen car. Every failure path still shows "Or call 9845976916".
+`public/images/` holds `logo.png`, `etios`, `ertiga`, `innova`, `tt`, `tt-interior` as
+1200×900 JPG plus a WebP twin. The car and logo files are AI-generated stand-ins
+until real photos of the fleet and the real logo are available — replace the files,
+keep the names, and nothing else needs to change. The hero image is preloaded; the
+rest are lazy-loaded with width/height set.

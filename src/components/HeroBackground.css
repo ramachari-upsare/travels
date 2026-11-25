@@ -1,0 +1,26 @@
+/* Hero texture layer.
+   Base: a very faint dot pattern on the navy hero (safe everywhere).
+   Above it: Silk on desktop only, blended softly so white copy stays 7:1+. */
+.hero__fx {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* above the photo overlay, below the hero copy */
+  pointer-events: none;
+  opacity: 1;
+  background-color: transparent;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.hero__fx .silk {
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+}
+
+/* Without WebGL, or on phones and reduced motion, the pattern above is all
+   there is — deliberately quiet. */
+@media (prefers-reduced-motion: reduce) {
+  .hero__fx .silk {
+    display: none;
+  }
+}
