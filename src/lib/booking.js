@@ -8,12 +8,39 @@ export const WHATSAPP_NUMBER = '919845976916';
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 export const TAGLINE = 'Explore • Travel • Discover';
 
-/* Fleet — name, seats and rate exactly as supplied. */
+/* Fleet — name, seats, rate and gallery images exactly as supplied. */
 export const CARS = [
-  { name: 'Etios', seats: '4 + 1', rate: 15, image: 'etios' },
-  { name: 'Ertiga', seats: '6 + 1', rate: 18, image: 'ertiga' },
-  { name: 'Innova Crysta', seats: '7 + 1', rate: 20, image: 'innova' },
-  { name: 'Tempo Traveller', seats: '12 + 1', rate: 24, image: 'tt' }
+  {
+    name: 'Etios',
+    seats: '4 + 1',
+    rate: 15,
+    image: 'etios',
+    gallery: [{ jpg: '/images/etios/1.jpg', webp: '/images/etios/1.webp', alt: 'Etios exterior' }]
+  },
+  {
+    name: 'Ertiga',
+    seats: '6 + 1',
+    rate: 18,
+    image: 'ertiga',
+    gallery: [{ jpg: '/images/ertiga/1.jpg', webp: '/images/ertiga/1.webp', alt: 'Ertiga exterior' }]
+  },
+  {
+    name: 'Innova Crysta',
+    seats: '7 + 1',
+    rate: 20,
+    image: 'innova',
+    gallery: [{ jpg: '/images/innova/1.jpg', webp: '/images/innova/1.webp', alt: 'Innova Crysta exterior' }]
+  },
+  {
+    name: 'Tempo Traveller',
+    seats: '12 + 1',
+    rate: 24,
+    image: 'tt',
+    gallery: [
+      { jpg: '/images/tt/1.jpg', webp: '/images/tt/1.webp', alt: 'Tempo Traveller exterior' },
+      { jpg: '/images/tt/2.jpg', webp: '/images/tt/2.webp', alt: 'Tempo Traveller interior' }
+    ]
+  }
 ];
 
 export const TRIP_TYPES = ['Local', 'Outstation', 'Airport pick-up and drop', 'All-India service'];

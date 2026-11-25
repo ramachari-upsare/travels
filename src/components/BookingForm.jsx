@@ -12,6 +12,26 @@ import {
 
 const EMPTY = { name: '', phone: '', tripType: '', pickup: '', drop: '', date: '', time: '' };
 
+function SelectWrap({ children }) {
+  return (
+    <div className="select-wrap">
+      {children}
+      <svg
+        className="select-wrap__chevron"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </div>
+  );
+}
+
 function Field({ id, label, optional, error, children }) {
   return (
     <div className={`field${error ? ' field--error' : ''}`}>
@@ -29,20 +49,18 @@ function Field({ id, label, optional, error, children }) {
   );
 }
 
-function SelectChevron() {
+function FormGroup({ number, title, helper, children }) {
   return (
-    <svg
-      className="select-wrap__chevron"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
+    <div className="form-group">
+      <div className="form-group__header">
+        <span className="form-group__number">{number}</span>
+        <div>
+          <h3 className="form-group__title">{title}</h3>
+          <p className="form-group__helper">{helper}</p>
+        </div>
+      </div>
+      <div className="form-group__fields">{children}</div>
+    </div>
   );
 }
 
@@ -77,7 +95,7 @@ export default function BookingForm({ car, onCarChange }) {
     const firstKey = Object.keys(found)[0];
     if (firstKey) {
       setSentUrl('');
-      setSummary('Please check the highlighted fields and send again.');
+      setSummary('Please check the highlighted fields and try again.');
       const node = formRef.current && formRef.current.querySelector(`#field-${firstKey}`);
       if (node) node.focus();
       return;
@@ -87,7 +105,6 @@ export default function BookingForm({ car, onCarChange }) {
     const url = whatsappHref(candidate);
     setSentUrl(url);
 
-    // Open WhatsApp with the pre-filled message. If blocked, fall back to same-tab jump.
     let opened = null;
     try {
       opened = window.open(url, '_blank', 'noopener');
@@ -104,15 +121,12 @@ export default function BookingForm({ car, onCarChange }) {
       ref={formRef}
       onSubmit={handleSubmit}
       noValidate
-      aria-labelledby="booking-title"
     >
       {summary ? (
-        <p className="booking-card__summary" role="alert">
-          {summary}
-        </p>
+        <p className="booking-card__alert" role="alert">{summary}</p>
       ) : null}
 
-      <div className="booking-card__fields">
+      <FormGroup number="01" title="Your details" helper="So we can reach you about your trip.">
         <Field id="field-name" label="Name" error={errors.name}>
           <input
             id="field-name"
@@ -135,7 +149,7 @@ export default function BookingForm({ car, onCarChange }) {
             type="tel"
             inputMode="tel"
             autoComplete="tel"
-            placeholder="10-digit mobile number"
+            placeholder="10-digit number"
             value={values.phone}
             onChange={change('phone')}
             aria-invalid={Boolean(errors.phone)}
@@ -143,9 +157,11 @@ export default function BookingForm({ car, onCarChange }) {
             required
           />
         </Field>
+      </FormGroup>
 
+      <FormGroup number="02" title="Trip details" helper="We'll confirm the final fare on call.">
         <Field id="field-tripType" label="Trip type" error={errors.tripType}>
-          <div className="select-wrap">
+          <SelectWrap>
             <select
               id="field-tripType"
               name="tripType"
@@ -157,13 +173,10 @@ export default function BookingForm({ car, onCarChange }) {
             >
               <option value="">Select trip type</option>
               {TRIP_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
+                <option key={type} value={type}>{type}</option>
               ))}
             </select>
-            <SelectChevron />
-          </div>
+          </SelectWrap>
         </Field>
 
         <Field id="field-pickup" label="Pickup location" error={errors.pickup}>
@@ -192,7 +205,7 @@ export default function BookingForm({ car, onCarChange }) {
           />
         </Field>
 
-        <div className="booking-card__pair">
+        <div className="field-pair">
           <Field id="field-date" label="Date" error={errors.date}>
             <input
               id="field-date"
@@ -217,9 +230,11 @@ export default function BookingForm({ car, onCarChange }) {
             />
           </Field>
         </div>
+      </FormGroup>
 
-        <Field id="field-car" label="Car" optional>
-          <div className="select-wrap">
+      <FormGroup number="03" title="Car" helper="Pick a car or let us suggest one.">
+        <Field id="field-car" label="Car preference" optional>
+          <SelectWrap>
             <select id="field-car" name="car" value={car} onChange={(event) => onCarChange(event.target.value)}>
               <option value="">Any car</option>
               {CARS.map((item) => (
@@ -228,10 +243,9 @@ export default function BookingForm({ car, onCarChange }) {
                 </option>
               ))}
             </select>
-            <SelectChevron />
-          </div>
+          </SelectWrap>
         </Field>
-      </div>
+      </FormGroup>
 
       <div className="booking-card__actions">
         <button className="btn btn--orange btn--block" type="submit">
@@ -246,12 +260,7 @@ export default function BookingForm({ car, onCarChange }) {
         <div className="booking-card__success" aria-live="polite">
           <h3>Message ready</h3>
           <p>WhatsApp is opening with your trip details. Press send and final fare will be confirmed on call.</p>
-          <a
-            className="btn btn--outline"
-            href={sentUrl || WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a className="btn btn--outline" href={sentUrl} target="_blank" rel="noopener noreferrer">
             Open WhatsApp again
           </a>
         </div>
