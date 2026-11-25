@@ -1,19 +1,19 @@
 /* Hero texture layer.
-   Base: static teal with a very faint pattern (safe on every device).
-   Above it: Silk, blended softly so white copy stays at 7:1 or better. */
+   Base: a very faint dot pattern on the navy hero (safe everywhere).
+   Above it: Silk on desktop only, blended softly so white copy stays 7:1+. */
 .hero__fx {
   position: absolute;
   inset: 0;
   z-index: 1; /* above the photo overlay, below the hero copy */
   pointer-events: none;
   opacity: 1;
-  background-color: rgba(10, 71, 71, 0.55);
-  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-  background-size: 18px 18px;
+  background-color: transparent;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .hero__fx .silk {
-  opacity: 0.55;
+  opacity: 0.5;
   mix-blend-mode: soft-light;
 }
 

@@ -45,7 +45,7 @@ export default function HeroBackground() {
       {enabled && (
         <SafeBoundary>
           <Suspense fallback={null}>
-            <Silk speed={0.22} scale={1.15} noise={0.85} />
+            <Silk speed={0.2} scale={1.1} noise={0.8} color="#1B365A" />
           </Suspense>
         </SafeBoundary>
       )}
