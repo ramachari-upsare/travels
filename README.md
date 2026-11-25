@@ -16,7 +16,11 @@ Drop these into `./images/` and they appear automatically:
 Until a file exists, the site shows a clean branded gradient placeholder instead of a broken image (no layout shift). Vehicle photos are displayed with `object-fit: cover` and lazy loading.
 
 ## Editing
-- **Colours** — CSS variables at the top of the `<style>` block: `--navy`, `--white`, `--light`, `--impact`. Orange (`--impact`) is used only for booking buttons, prices, key accents and the floating call/WhatsApp buttons.
+- **Colours** — 60-30-10, as CSS variables at the top of the `<style>` block:
+  - 60% calm: `--linen` `#F6F0E6` for page/section backgrounds and cards, with `--ink` `#0B1F3F` body text
+  - 30% support: `--navy` `#0B2A5B` for header, hero overlay, footer, headings and glass over dark areas
+  - 10% impact: `--amber` `#FFB300` **only** for Book Now / Book This Car buttons, price highlights, active states and the floating WhatsApp + Call buttons. Text on amber is always navy. Never use amber for body text or large fills.
+  - Glass sits on the hero booking card, the sticky header, the floating buttons, and the vehicle cards — three soft blurred navy/amber fields sit behind the fleet cards so the glass has something to refract.
 - **Phone / WhatsApp** — search for `9845976916` (displayed) and `+919845976916` (links). The number appears in the header, hero, booking form, footer, floating buttons and the JavaScript `wa.me` URL.
 - **Fleet prices** — update the fleet cards, the vehicle `<select>` options (`data-seats` / `data-rate`) and the JSON-LD `makesOffer` block.
 - **Reviews** — `#reviews-section` is empty and `hidden`. Add real reviews inside `#reviews-list`, then remove the `hidden` attribute. No demo reviews are shown.
