@@ -4,7 +4,7 @@ import './Silk.css';
 
 /**
  * React Bits "Silk", JS + CSS variant (OGL shader, no react-three-fiber).
- * Slow teal flow used as a very subtle hero texture on desktop only.
+ * Slow navy & steel flow used as a very subtle hero texture on desktop only.
  * Everything is wrapped so a missing WebGL context leaves the CSS gradient
  * in place — the hero copy, buttons and form never depend on this.
  */
@@ -62,7 +62,7 @@ void main() {
   n += 0.4 * fbm(vec2(uv.x * 3.3 - t * 0.15, uv.y * 4.1 + t * 0.35));
 
   float bands = smoothstep(0.32, 0.95, n);
-  vec3 col = uColor + uColor * 0.55 * bands + vec3(0.02, 0.07, 0.07) * pow(bands, 2.5);
+  vec3 col = uColor + uColor * 0.55 * bands + vec3(0.05, 0.08, 0.14) * pow(bands, 2.5);
 
   gl_FragColor = vec4(mix(uColor, col, uNoise), 1.0);
 }
@@ -71,7 +71,7 @@ void main() {
 export default function Silk({
   speed = 0.22,
   scale = 1.15,
-  color = '#0E5A5A',
+  color = '#1B365A',
   noise = 0.85,
   className = ''
 }) {

@@ -29,10 +29,27 @@ function Field({ id, label, optional, error, children }) {
   );
 }
 
+function SelectChevron() {
+  return (
+    <svg
+      className="select-wrap__chevron"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export default function BookingForm({ car, onCarChange }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
-  const [sent, setSent] = useState(false);
+  const [sentUrl, setSentUrl] = useState('');
   const [summary, setSummary] = useState('');
   const formRef = useRef(null);
   const minDate = todayISO();
@@ -49,7 +66,7 @@ export default function BookingForm({ car, onCarChange }) {
     }
   };
 
-  const describedBy = (key) => (errors[key] ? `${key}-error` : undefined);
+  const describedBy = (key) => (errors[key] ? `field-${key}-error` : undefined);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -59,7 +76,7 @@ export default function BookingForm({ car, onCarChange }) {
 
     const firstKey = Object.keys(found)[0];
     if (firstKey) {
-      setSent(false);
+      setSentUrl('');
       setSummary('Please check the highlighted fields and send again.');
       const node = formRef.current && formRef.current.querySelector(`#field-${firstKey}`);
       if (node) node.focus();
@@ -68,17 +85,16 @@ export default function BookingForm({ car, onCarChange }) {
 
     setSummary('');
     const url = whatsappHref(candidate);
+    setSentUrl(url);
 
-    // Open WhatsApp. If the popup is blocked, fall back to a same-tab jump.
+    // Open WhatsApp with the pre-filled message. If blocked, fall back to same-tab jump.
     let opened = null;
     try {
       opened = window.open(url, '_blank', 'noopener');
-    } catch (error) {
+    } catch {
       opened = null;
     }
     if (!opened) window.location.href = url;
-
-    setSent(true);
   };
 
   return (
@@ -90,11 +106,6 @@ export default function BookingForm({ car, onCarChange }) {
       noValidate
       aria-labelledby="booking-title"
     >
-      <h2 className="booking-card__title" id="booking-title">
-        Book a car
-      </h2>
-      <p className="booking-card__note">Fill this in — it opens WhatsApp with the details ready to send.</p>
-
       {summary ? (
         <p className="booking-card__summary" role="alert">
           {summary}
@@ -124,7 +135,7 @@ export default function BookingForm({ car, onCarChange }) {
             type="tel"
             inputMode="tel"
             autoComplete="tel"
-            placeholder="10-digit number"
+            placeholder="10-digit mobile number"
             value={values.phone}
             onChange={change('phone')}
             aria-invalid={Boolean(errors.phone)}
@@ -134,22 +145,25 @@ export default function BookingForm({ car, onCarChange }) {
         </Field>
 
         <Field id="field-tripType" label="Trip type" error={errors.tripType}>
-          <select
-            id="field-tripType"
-            name="tripType"
-            value={values.tripType}
-            onChange={change('tripType')}
-            aria-invalid={Boolean(errors.tripType)}
-            aria-describedby={describedBy('tripType')}
-            required
-          >
-            <option value="">Select trip type</option>
-            {TRIP_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <div className="select-wrap">
+            <select
+              id="field-tripType"
+              name="tripType"
+              value={values.tripType}
+              onChange={change('tripType')}
+              aria-invalid={Boolean(errors.tripType)}
+              aria-describedby={describedBy('tripType')}
+              required
+            >
+              <option value="">Select trip type</option>
+              {TRIP_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+            <SelectChevron />
+          </div>
         </Field>
 
         <Field id="field-pickup" label="Pickup location" error={errors.pickup}>
@@ -158,7 +172,7 @@ export default function BookingForm({ car, onCarChange }) {
             name="pickup"
             type="text"
             autoComplete="street-address"
-            placeholder="Where we pick you up"
+            placeholder="Pickup address or area"
             value={values.pickup}
             onChange={change('pickup')}
             aria-invalid={Boolean(errors.pickup)}
@@ -172,7 +186,7 @@ export default function BookingForm({ car, onCarChange }) {
             id="field-drop"
             name="drop"
             type="text"
-            placeholder="If you know it"
+            placeholder="Drop city or address"
             value={values.drop}
             onChange={change('drop')}
           />
@@ -205,29 +219,39 @@ export default function BookingForm({ car, onCarChange }) {
         </div>
 
         <Field id="field-car" label="Car" optional>
-          <select id="field-car" name="car" value={car} onChange={(event) => onCarChange(event.target.value)}>
-            <option value="">Any car</option>
-            {CARS.map((item) => (
-              <option key={item.name} value={item.name}>
-                {item.name} — {item.seats}
-              </option>
-            ))}
-          </select>
+          <div className="select-wrap">
+            <select id="field-car" name="car" value={car} onChange={(event) => onCarChange(event.target.value)}>
+              <option value="">Any car</option>
+              {CARS.map((item) => (
+                <option key={item.name} value={item.name}>
+                  {item.name} — {item.seats} (Rs {item.rate}/km)
+                </option>
+              ))}
+            </select>
+            <SelectChevron />
+          </div>
         </Field>
       </div>
 
-      <button className="btn btn--orange btn--block" type="submit">
-        Book on WhatsApp
-      </button>
-      <p className="booking-card__call">
-        Or call <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
-      </p>
+      <div className="booking-card__actions">
+        <button className="btn btn--orange btn--block" type="submit">
+          Book on WhatsApp
+        </button>
+        <a className="btn btn--outline btn--block" href={PHONE_TEL}>
+          Call {PHONE_DISPLAY}
+        </a>
+      </div>
 
-      {sent ? (
+      {sentUrl ? (
         <div className="booking-card__success" aria-live="polite">
           <h3>Message ready</h3>
-          <p>WhatsApp is opening with your details. Press send and the fare is confirmed on call.</p>
-          <a className="btn btn--outline" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+          <p>WhatsApp is opening with your trip details. Press send and final fare will be confirmed on call.</p>
+          <a
+            className="btn btn--outline"
+            href={sentUrl || WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Open WhatsApp again
           </a>
         </div>

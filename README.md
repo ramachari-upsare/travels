@@ -21,10 +21,10 @@ npm run preview    # serve dist/ locally
 | Output directory | `dist` |
 
 ## Page
-1. **Header** — wordmark, phone number, Call button.
-2. **Hero** — vehicle photo under a navy overlay with soft steel/blush depth, one headline, the four service names on one line, Book Now + Call. No form in the hero.
-3. **Fleet** — four cards (photo, name, seats, `Rs XX per km`, Book This Car), horizontal snap scrolling on phones and one row on desktop, toll note underneath.
-4. **Services** — the four service names, 2×2 on phones and one row on desktop.
+1. **Header** — wordmark, Call button.
+2. **Hero** — navy surface with soft steel/blush depth, tagline, headline, the four service names on one line, Book Now + Call, and framed Innova Crysta photo. No form in the hero.
+3. **Services** — the four service names with steel-blue icons, 2×2 on phones and one row on desktop.
+4. **Fleet** — four cards (photo, name, seats, `Rs XX per km`, Book This Car, plus Tempo Traveller interior toggle), horizontal snap scrolling on phones and one row on desktop, toll note underneath.
 5. **Booking** — the one form (name, mobile, trip type, pickup, drop optional, date, time optional, car) with a visible call option.
 6. **Contact strip + footer** — phone, Call/WhatsApp, tagline, copyright.
 7. **Mobile bar** — Call / WhatsApp / Book Now, hidden from 768px up.
