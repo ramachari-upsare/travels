@@ -169,6 +169,7 @@
   --amber:#FFB300;
 
   /* tints (derived from the colours above) */
+  --ink-82:rgba(11,31,63,.82);
   --ink-78:rgba(11,31,63,.78);
   --ink-64:rgba(11,31,63,.64);
   --navy-12:rgba(11,42,91,.12);
@@ -681,7 +682,7 @@ svg{ display:block; }
 .car-body{ display:flex; flex-direction:column; flex:1; gap:.5rem; padding:1rem .55rem .5rem; color:var(--ink); }
 .car-head{ display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; }
 .car-head h3{ font-size:1.1rem; color:var(--navy); }
-.car-seats{ font-size:.78rem; color:var(--ink-64); white-space:nowrap; }
+.car-seats{ font-size:.78rem; color:var(--ink-82); white-space:nowrap; }
 .car-price{
   display:inline-flex; align-items:baseline; gap:.32rem;
   width:max-content; margin:.15rem 0 .35rem; padding:.34rem .72rem;
@@ -691,7 +692,7 @@ svg{ display:block; }
 }
 .car-price .amount{ font-size:1.3rem; font-weight:700; line-height:1; letter-spacing:-.02em; }
 .car-price .per{ font-family:var(--font-body); font-size:.72rem; color:rgba(255,255,255,.78); }
-.car-features{ display:grid; gap:.4rem; margin:.15rem 0 .9rem; font-size:.83rem; color:var(--ink-78); }
+.car-features{ display:grid; gap:.4rem; margin:.15rem 0 .9rem; font-size:.83rem; color:var(--ink-82); }
 .car-features li{ display:flex; gap:.5rem; align-items:flex-start; line-height:1.45; }
 .car-features li::before{
   content:""; flex:none; width:15px; height:15px; margin-top:.18rem; opacity:.55;
@@ -705,20 +706,23 @@ svg{ display:block; }
 }
 .fare-note svg{ flex:none; width:16px; height:16px; margin-top:.15rem; }
 
-/* Soft blurred navy/amber fields behind the fleet cards — the glass refracts these */
+/* Soft blurred navy/amber fields behind the fleet cards — the glass refracts these.
+   They are scoped to the card stage so section copy always sits on plain linen. */
 .section--shapes{ overflow:hidden; }
-.shape-field{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+.fleet-stage{ position:relative; isolation:isolate; }
+.fleet-stage .shape-field{ position:absolute; inset:-28px -9%; z-index:0; pointer-events:none; }
+.fleet-grid{ position:relative; z-index:1; }
 .shape{ position:absolute; border-radius:50%; filter:blur(58px); }
 .shape--navy{
-  width:min(62vw,540px); aspect-ratio:1/.85; left:-12%; top:9%;
+  width:min(62vw,520px); aspect-ratio:1/.9; left:-14%; top:-8%;
   background:radial-gradient(circle,rgba(11,42,91,.5),rgba(11,42,91,0) 70%);
 }
 .shape--amber{
-  width:min(48vw,420px); aspect-ratio:1/.9; right:-7%; top:3%; opacity:.8;
+  width:min(48vw,400px); aspect-ratio:1/.95; right:-8%; top:-4%; opacity:.8;
   background:radial-gradient(circle,rgba(255,179,0,.55),rgba(255,179,0,0) 70%);
 }
 .shape--navy-2{
-  width:min(64vw,580px); aspect-ratio:1/.62; right:14%; bottom:-12%;
+  width:min(64vw,540px); aspect-ratio:1/.7; right:12%; bottom:-14%;
   background:radial-gradient(circle,rgba(11,42,91,.38),rgba(11,42,91,0) 72%);
 }
 @media (max-width:599px){
@@ -1199,12 +1203,6 @@ svg{ display:block; }
      4. FLEET
      ============================================================ -->
 <section class="section section--linen section--shapes" id="fleet" aria-labelledby="fleet-title">
-  <!-- Soft navy/amber fields the glass cards refract -->
-  <div class="shape-field" aria-hidden="true">
-    <span class="shape shape--navy"></span>
-    <span class="shape shape--amber"></span>
-    <span class="shape shape--navy-2"></span>
-  </div>
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Our fleet</p>
@@ -1212,116 +1210,124 @@ svg{ display:block; }
       <p class="section-lede">Seats are shown as passengers + driver. Every vehicle is air conditioned and driven by a professional driver.</p>
     </div>
 
-    <div class="fleet-grid grid-stagger">
+    <div class="fleet-stage">
+      <!-- Soft navy/amber fields the glass cards refract -->
+      <div class="shape-field" aria-hidden="true">
+        <span class="shape shape--navy"></span>
+        <span class="shape shape--amber"></span>
+        <span class="shape shape--navy-2"></span>
+      </div>
+      <div class="fleet-grid grid-stagger">
 
-      <!-- Etios -->
-      <article class="car-card glass glass--card reveal">
-        <figure class="car-media">
-          <span class="media-ph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5v-3.7c0-.35.09-.7.27-1L5 8.3A2 2 0 0 1 6.8 7.2h10.4a2 2 0 0 1 1.8 1.1l1.73 3.5c.18.3.27.65.27 1v3.7"/><path d="M4.6 12.2h14.8"/></svg>
-            <span>Etios</span>
-          </span>
-          <img src="./images/etios.jpg" alt="Etios sedan from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
-          <span class="seat-badge">4+1 seats</span>
-        </figure>
-        <div class="car-body">
-          <div class="car-head">
-            <h3>Etios</h3>
-            <p class="car-seats">4 passengers + driver</p>
+        <!-- Etios -->
+        <article class="car-card glass glass--card reveal">
+          <figure class="car-media">
+            <span class="media-ph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5v-3.7c0-.35.09-.7.27-1L5 8.3A2 2 0 0 1 6.8 7.2h10.4a2 2 0 0 1 1.8 1.1l1.73 3.5c.18.3.27.65.27 1v3.7"/><path d="M4.6 12.2h14.8"/></svg>
+              <span>Etios</span>
+            </span>
+            <img src="./images/etios.jpg" alt="Etios sedan from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
+            <span class="seat-badge">4+1 seats</span>
+          </figure>
+          <div class="car-body">
+            <div class="car-head">
+              <h3>Etios</h3>
+              <p class="car-seats">4 passengers + driver</p>
+            </div>
+            <p class="car-price"><span class="amount">₹15</span><span class="per">/km</span></p>
+            <ul class="car-features">
+              <li>Air conditioned</li>
+              <li>Clean interiors</li>
+              <li>Professional driver</li>
+              <li>Ideal for city trips</li>
+            </ul>
+            <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Etios">Book This Car</button>
           </div>
-          <p class="car-price"><span class="amount">₹15</span><span class="per">/km</span></p>
-          <ul class="car-features">
-            <li>Air conditioned</li>
-            <li>Clean interiors</li>
-            <li>Professional driver</li>
-            <li>Ideal for city trips</li>
-          </ul>
-          <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Etios">Book This Car</button>
-        </div>
-      </article>
+        </article>
 
-      <!-- Ertiga -->
-      <article class="car-card glass glass--card reveal">
-        <figure class="car-media">
-          <span class="media-ph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5v-3.7c0-.35.09-.7.27-1L5 8.3A2 2 0 0 1 6.8 7.2h10.4a2 2 0 0 1 1.8 1.1l1.73 3.5c.18.3.27.65.27 1v3.7"/><path d="M4.6 12.2h14.8"/></svg>
-            <span>Ertiga</span>
-          </span>
-          <img src="./images/ertiga.jpg" alt="Ertiga MPV from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
-          <span class="seat-badge">6+1 seats</span>
-        </figure>
-        <div class="car-body">
-          <div class="car-head">
-            <h3>Ertiga</h3>
-            <p class="car-seats">6 passengers + driver</p>
+        <!-- Ertiga -->
+        <article class="car-card glass glass--card reveal">
+          <figure class="car-media">
+            <span class="media-ph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5v-3.7c0-.35.09-.7.27-1L5 8.3A2 2 0 0 1 6.8 7.2h10.4a2 2 0 0 1 1.8 1.1l1.73 3.5c.18.3.27.65.27 1v3.7"/><path d="M4.6 12.2h14.8"/></svg>
+              <span>Ertiga</span>
+            </span>
+            <img src="./images/ertiga.jpg" alt="Ertiga MPV from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
+            <span class="seat-badge">6+1 seats</span>
+          </figure>
+          <div class="car-body">
+            <div class="car-head">
+              <h3>Ertiga</h3>
+              <p class="car-seats">6 passengers + driver</p>
+            </div>
+            <p class="car-price"><span class="amount">₹18</span><span class="per">/km</span></p>
+            <ul class="car-features">
+              <li>Air conditioned</li>
+              <li>Clean interiors</li>
+              <li>Professional driver</li>
+              <li>Extra room for families</li>
+            </ul>
+            <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Ertiga">Book This Car</button>
           </div>
-          <p class="car-price"><span class="amount">₹18</span><span class="per">/km</span></p>
-          <ul class="car-features">
-            <li>Air conditioned</li>
-            <li>Clean interiors</li>
-            <li>Professional driver</li>
-            <li>Extra room for families</li>
-          </ul>
-          <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Ertiga">Book This Car</button>
-        </div>
-      </article>
+        </article>
 
-      <!-- Innova Crysta -->
-      <article class="car-card glass glass--card reveal">
-        <figure class="car-media">
-          <span class="media-ph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5v-3.7c0-.35.09-.7.27-1L5 8.3A2 2 0 0 1 6.8 7.2h10.4a2 2 0 0 1 1.8 1.1l1.73 3.5c.18.3.27.65.27 1v3.7"/><path d="M4.6 12.2h14.8"/></svg>
-            <span>Innova Crysta</span>
-          </span>
-          <img src="./images/innova.jpg" alt="Innova Crysta MPV from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
-          <span class="seat-badge">7+1 seats</span>
-        </figure>
-        <div class="car-body">
-          <div class="car-head">
-            <h3>Innova Crysta</h3>
-            <p class="car-seats">7 passengers + driver</p>
+        <!-- Innova Crysta -->
+        <article class="car-card glass glass--card reveal">
+          <figure class="car-media">
+            <span class="media-ph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5v-3.7c0-.35.09-.7.27-1L5 8.3A2 2 0 0 1 6.8 7.2h10.4a2 2 0 0 1 1.8 1.1l1.73 3.5c.18.3.27.65.27 1v3.7"/><path d="M4.6 12.2h14.8"/></svg>
+              <span>Innova Crysta</span>
+            </span>
+            <img src="./images/innova.jpg" alt="Innova Crysta MPV from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
+            <span class="seat-badge">7+1 seats</span>
+          </figure>
+          <div class="car-body">
+            <div class="car-head">
+              <h3>Innova Crysta</h3>
+              <p class="car-seats">7 passengers + driver</p>
+            </div>
+            <p class="car-price"><span class="amount">₹20</span><span class="per">/km</span></p>
+            <ul class="car-features">
+              <li>Air conditioned</li>
+              <li>Clean interiors</li>
+              <li>Professional driver</li>
+              <li>Spacious seating</li>
+            </ul>
+            <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Innova Crysta">Book This Car</button>
           </div>
-          <p class="car-price"><span class="amount">₹20</span><span class="per">/km</span></p>
-          <ul class="car-features">
-            <li>Air conditioned</li>
-            <li>Clean interiors</li>
-            <li>Professional driver</li>
-            <li>Spacious seating</li>
-          </ul>
-          <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Innova Crysta">Book This Car</button>
-        </div>
-      </article>
+        </article>
 
-      <!-- Tempo Traveller -->
-      <article class="car-card glass glass--card reveal">
-        <figure class="car-media">
-          <span class="media-ph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5V9a2 2 0 0 1 2-2h9.5a2 2 0 0 1 1.7 1l3.3 4.6c.3.4.5.9.5 1.4v2.5"/><path d="M3 12h18M9 7v5M16 7v5"/></svg>
-            <span>Tempo Traveller</span>
-          </span>
-          <img src="./images/tt.jpg" alt="Tempo Traveller van from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
-          <span class="seat-badge">12+1 seats</span>
-          <span class="media-inset">
-            <span class="media-inset-ph" aria-hidden="true">Interior</span>
-            <img src="./images/tt-interior.jpg" alt="Interior seating inside the Tempo Traveller" width="400" height="300" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
-          </span>
-        </figure>
-        <div class="car-body">
-          <div class="car-head">
-            <h3>Tempo Traveller</h3>
-            <p class="car-seats">12 passengers + driver</p>
+        <!-- Tempo Traveller -->
+        <article class="car-card glass glass--card reveal">
+          <figure class="car-media">
+            <span class="media-ph" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18M4.5 16.5v2.2M19.5 16.5v2.2"/><path d="M3 16.5V9a2 2 0 0 1 2-2h9.5a2 2 0 0 1 1.7 1l3.3 4.6c.3.4.5.9.5 1.4v2.5"/><path d="M3 12h18M9 7v5M16 7v5"/></svg>
+              <span>Tempo Traveller</span>
+            </span>
+            <img src="./images/tt.jpg" alt="Tempo Traveller van from the Manasvi Tours &amp; Travels fleet" width="800" height="600" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
+            <span class="seat-badge">12+1 seats</span>
+            <span class="media-inset">
+              <span class="media-inset-ph" aria-hidden="true">Interior</span>
+              <img src="./images/tt-interior.jpg" alt="Interior seating inside the Tempo Traveller" width="400" height="300" loading="lazy" decoding="async" onerror="this.classList.add('is-missing')">
+            </span>
+          </figure>
+          <div class="car-body">
+            <div class="car-head">
+              <h3>Tempo Traveller</h3>
+              <p class="car-seats">12 passengers + driver</p>
+            </div>
+            <p class="car-price"><span class="amount">₹24</span><span class="per">/km</span></p>
+            <ul class="car-features">
+              <li>Air conditioned</li>
+              <li>Clean interiors</li>
+              <li>Professional driver</li>
+              <li>Best for groups</li>
+            </ul>
+            <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Tempo Traveller">Book This Car</button>
           </div>
-          <p class="car-price"><span class="amount">₹24</span><span class="per">/km</span></p>
-          <ul class="car-features">
-            <li>Air conditioned</li>
-            <li>Clean interiors</li>
-            <li>Professional driver</li>
-            <li>Best for groups</li>
-          </ul>
-          <button class="btn btn--impact btn--block" type="button" data-book-vehicle="Tempo Traveller">Book This Car</button>
-        </div>
-      </article>
+        </article>
 
+      </div>
     </div>
 
     <p class="fare-note">
